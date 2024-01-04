@@ -1,0 +1,95 @@
+.fa-color {
+  color: #8C2703;
+}
+
+.pizza-bg-color {
+  background-color: #D98E04;
+}
+
+.text-pizza-color {
+  color: #638C46;
+}
+
+.border-text {
+  border-bottom: 5px solid #D98E04;
+  border-top: 5px solid #D98E04;
+}
+
+.h-tape {
+  height: 10vh;
+}
+
+.btn-group {
+  width: 90vw !important;
+}
+
+.dropdown-menu {
+  width: 90vw !important;
+}
+
+.img-header {
+  background-image: url('/img/pizzas_background.jpg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.h-header {
+  min-height: 60vh;
+}
+
+.bg-color-header {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.tape-color {
+  background: rgb(140, 39, 3);
+  background: linear-gradient(90deg, rgba(140, 39, 3, 1) 0%, rgba(217, 142, 4, 1) 50%, rgba(99, 140, 70, 1) 100%);
+}
+
+.fa-fs {
+  font-size: 3em;
+}
+
+@media (max-width: 992px) {
+
+  .display-mobile {
+    display: block;
+  }
+
+  .display-desktop {
+    display: none;
+  }
+  
+}
+
+@media (min-width: 992px) {
+
+  .display-desktop {
+    display: block;
+  }
+
+  .display-mobile {
+    display: none;
+  }
+  
+}
+
+.card {
+  box-shadow: 0px 0px 10px gray;
+}
+
+
+.h-card {
+  height: 3em;
+}
+
+.btn-agregar {
+  background-color: #638C46;
+  color: #FFFFFF;
+}
+
+.btn-agregar:hover {
+  background-color: #8AC96A;
+  color: #FFFFFF;
+}
