@@ -1,3 +1,5 @@
+// Cuando el DOM se haya cargado completamente,
+// Utilizo el evento <addEventListener> del DOM para ejecutar el resto del código. 
 document.addEventListener('DOMContentLoaded', function () {
 
   const pizzas = [
@@ -55,9 +57,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const cardTemplate = document.querySelector('.card-template');
 
-  for (let pizza of pizzas) {
-
-    const template =
+  // Utilizo el método <.map> para generar un array de plantillas.
+  const templatesCard = pizzas.map( pizza =>
     `
       <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
         <div class="card mb-5" style="width: 18rem;">
@@ -73,47 +74,75 @@ document.addEventListener('DOMContentLoaded', function () {
           </div>
         </div>
       </div>      
-    `;
+    `
+  );
 
-    cardTemplate.innerHTML += template;
+  // Utilizo el método <.join('')> para concatenar el array 'templates' en una sola cadena de texto.
+  // Asigno al <innerHTML> de 'cardTemplate'
+  cardTemplate.innerHTML = templatesCard.join('');
 
-  };
-
-  // Declaro variables para almacenar referencias a los elementos del formulario.
-  const card = document.querySelector('.card');
+  const cards = document.querySelectorAll('.card');
+  let pizzasCart = [];  
   
-  // Asigno escuchadores de eventos a los elementos del formulario:
-  card.addEventListener('click', addPizza);
+  // Utilizo el método <forEach> para iterar sobre cada elemento '.card'
+  // Utilizo el evento <click> mediante <addEventListener> especificando que la función 'addPizza' debe ejecutarse. 
+  cards.forEach(card => {
+    card.addEventListener('click', selectPizza);
+  });
 
-  function addPizza(e) {
+  function selectPizza(e) {
 
     e.preventDefault();
   
-    // Si al seleccionar el elemento contiene una clase llamada 'btn-agregar'
     if(e.target.classList.contains('btn-agregar')) {
 
-      // Se asgina a la variable 'btnAgregarClick' el elemento '.parentElement' que en este caso es el elemento abuelo. 
       const btnAgregarClick = e.target.parentElement.parentElement;
 
-      readCard(btnAgregarClick);
+      createObjectCart(btnAgregarClick);
 
     };
 
   };
 
-  function readCard(cardPizza) {
+  function createObjectCart(cardPizza) {
 
-    console.log(cardPizza); 
-
-    // Creo un objeto con el contenido de la pizza agregada.
     const objectCart = {
       img: cardPizza.querySelector('img').src,
       name: cardPizza.querySelector('h4').textContent,
       cost: cardPizza.querySelector('h6').textContent,
     };
 
-    console.log(objectCart);    
-    
+    pizzasCart = [...pizzasCart, objectCart];
+
+    addPizzaCart();
+    console.log(pizzasCart);
+
+  };
+
+  function addPizzaCart() {
+
+    const cartTemplate = document.querySelector('.cart-template');
+
+    const templatesCart = pizzasCart.map( pizzaCart => {
+
+      // Aplicando destructuring
+      const { img, name, cost} = pizzaCart;
+
+      // Utilizo <return> para devolver cada plantilla generada por el <.map>
+      return`
+        <div class="row">
+          <div class="col-6"><img src='${img}' class="cart-img"></div>
+          <div class="col-6">
+            <p class="cart-name">${name}</p>
+            <p class="cart-cost">${cost}</p>
+          </div>
+        </div>
+        <hr />      
+      `;
+    });
+
+    cartTemplate.innerHTML = templatesCart.join('');
+  
   };
 
 });

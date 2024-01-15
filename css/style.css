@@ -23,9 +23,36 @@
   width: 90vw !important;
 }
 
+/* cart-dropdown */
 .dropdown-menu {
   width: 90vw !important;
 }
+
+.cart-img {
+  height: 100%;
+  width: 100%;
+}
+
+.cart-name {
+  font-weight: bold;
+}
+
+@media (min-width: 576px) {
+
+  .dropdown-menu {
+    width: 50vw !important;
+  }
+
+}
+
+@media (min-width: 992px) {
+
+  .dropdown-menu {
+    width: 30vw !important;
+  }
+
+}
+/* end cart-dropdown */
 
 .img-header {
   background-image: url('/img/pizzas_background.jpg');
@@ -35,7 +62,7 @@
 }
 
 .h-header {
-  min-height: 60vh;
+  min-height: 80vh;
 }
 
 .bg-color-header {
@@ -91,5 +118,16 @@
 
 .btn-agregar:hover {
   background-color: #8AC96A;
+  color: #FFFFFF;
+}
+
+.btn-ir {
+  background-color: #8C2703;
+  color: #FFFFFF;
+  width: 50%;
+}
+
+.btn-ir:hover {
+  background-color: #9d3415;
   color: #FFFFFF;
 }
