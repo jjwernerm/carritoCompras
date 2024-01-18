@@ -33,8 +33,20 @@
   width: 100%;
 }
 
-.cart-name {
+.fw-bold {
   font-weight: bold;
+}
+
+.amount-edit {
+  font-size: 1.5em;
+}
+
+.fa-square-plus {
+  color: green;
+}
+
+.fa-square-minus {
+  color: red;
 }
 
 @media (min-width: 576px) {

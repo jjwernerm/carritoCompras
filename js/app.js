@@ -58,15 +58,19 @@ document.addEventListener('DOMContentLoaded', function () {
   const cardTemplate = document.querySelector('.card-template');
 
   // Utilizo el método <.map> para generar un array de plantillas.
-  const templatesCard = pizzas.map( pizza =>
-    `
+  const templatesCard = pizzas.map( pizza => {
+
+    // Aplicando destructuring
+    const { img, name, ingredients, cost} = pizza;
+
+    return`
       <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
         <div class="card mb-5" style="width: 18rem;">
-          <img src="${pizza.img}" class="card-img-top p-2 rounded-4" alt="...">
+          <img src="${img}" class="card-img-top p-2 rounded-4" alt="...">
           <div class="card-body">
-            <h4 class="card-title">${pizza.name}</h4>
-            <p class="card-text h-card">${pizza.ingredients}</p>
-            <h6 class="card-cost">${pizza.cost.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}</h6>
+            <h4 class="card-title">${name}</h4>
+            <p class="card-text h-card">${ingredients}</p>
+            <h6 class="card-cost">${cost.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}</h6>
             <button class="btn pizza-bg-color btn-agregar" type="button">
               Agregar
               <i class="fa-solid fa-cart-shopping"></i>
@@ -75,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
       </div>      
     `
-  );
+  });
 
   // Utilizo el método <.join('')> para concatenar el array 'templates' en una sola cadena de texto.
   // Asigno al <innerHTML> de 'cardTemplate'
@@ -94,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     e.preventDefault();
   
-    if(e.target.classList.contains('btn-agregar')) {
+    if (e.target.classList.contains('btn-agregar')) {
 
       const btnAgregarClick = e.target.parentElement.parentElement;
 
@@ -110,12 +114,13 @@ document.addEventListener('DOMContentLoaded', function () {
       img: cardPizza.querySelector('img').src,
       name: cardPizza.querySelector('h4').textContent,
       cost: cardPizza.querySelector('h6').textContent,
+      amount: 1,
     };
 
+    // spread operator
     pizzasCart = [...pizzasCart, objectCart];
 
-    addPizzaCart();
-    console.log(pizzasCart);
+    addPizzaCart();        
 
   };
 
@@ -126,15 +131,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const templatesCart = pizzasCart.map( pizzaCart => {
 
       // Aplicando destructuring
-      const { img, name, cost} = pizzaCart;
+      const { img, name, cost, amount} = pizzaCart;
 
       // Utilizo <return> para devolver cada plantilla generada por el <.map>
       return`
         <div class="row">
-          <div class="col-6"><img src='${img}' class="cart-img"></div>
-          <div class="col-6">
-            <p class="cart-name">${name}</p>
+          <div class="col-3"><img src='${img}' class="cart-img"></div>
+          <div class="col-4">
+            <p class="fw-bold">${name}</p>
             <p class="cart-cost">${cost}</p>
+          </div>
+          <div class="col-5">
+            <p class="fw-bold text-center">Cantidad</p>
+            <div class="d-flex justify-content-between">
+              <p class="cart-amount">${amount}</p>
+              <i class="fa-solid fa-square-plus amount-edit"></i>
+              <i class="fa-solid fa-square-minus amount-edit"></i>
+              <i class="fa-solid fa-trash-can amount-edit"></i>
+            </div>
           </div>
         </div>
         <hr />      
@@ -142,7 +156,25 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     cartTemplate.innerHTML = templatesCart.join('');
-  
+
+    editCartTemplate(pizzasCart, cartTemplate);
+
+  };
+
+  function editCartTemplate(a, b) {
+
+    const emptyCartText = b.parentElement.querySelector('.empty-cart-text');
+    const btnIr = b.parentElement.querySelector('.btn-ir');
+
+    if (a.length = 1) {
+
+      emptyCartText.style.display = 'none';
+      btnIr.removeAttribute('disabled');
+
+    } else {
+      console.log('no')
+    };
+
   };
 
 });
