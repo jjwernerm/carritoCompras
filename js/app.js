@@ -55,12 +55,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   ];
 
+  // Asigno el elemento <class='card-template'> a <cardTemplate>
   const cardTemplate = document.querySelector('.card-template');
 
-  // Utilizo el método <.map> para generar un array de plantillas.
+  // Utilizo el método <.map> para iterar sobre el arreglo de objetos y poder generar un array de plantillas.
   const templatesCard = pizzas.map( pizza => {
 
-    // Aplicando destructuring
+    // Aplico destructuring (desestructuración de objetos), me permite extraer valores del arreglo y asignarlos
+    // a variables individuales. 
     const { img, name, ingredients, cost} = pizza;
 
     return`
@@ -89,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let pizzasCart = [];  
   
   // Utilizo el método <forEach> para iterar sobre cada elemento '.card'
-  // Utilizo el evento <click> mediante <addEventListener> especificando que la función 'addPizza' debe ejecutarse. 
+  // Utilizo el evento <click> mediante <addEventListener> especificando que la función 'selectPizza' debe ejecutarse. 
   cards.forEach(card => {
     card.addEventListener('click', selectPizza);
   });
@@ -110,6 +112,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function createObjectCart(cardPizza) {
 
+    const fs6 = document.querySelector('.fs-5');
+
     const objectCart = {
       img: cardPizza.querySelector('img').src,
       name: cardPizza.querySelector('h4').textContent,
@@ -117,8 +121,15 @@ document.addEventListener('DOMContentLoaded', function () {
       amount: 1,
     };
 
-    // spread operator
-    pizzasCart = [...pizzasCart, objectCart];
+    const existsPizza = pizzasCart.some(pizza => pizza.name === objectCart.name);
+    
+    if (existsPizza) {
+      msgPizzaExists(`Pizza ${objectCart.name}`, `Ya está en tu carrito.`);
+    } else {
+      // spread operator
+      pizzasCart = [...pizzasCart, objectCart];
+      fs6.innerHTML = pizzasCart.length;
+    };    
 
     addPizzaCart();        
 
@@ -161,18 +172,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
   };
 
+  function msgPizzaExists(pizzaName, msg) {
+
+    // Obtengo una referencia al modal por su ID
+    const miModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+
+    const exampleModalLabel = document.querySelector('#exampleModalLabel');
+    exampleModalLabel.innerHTML = pizzaName;
+
+    const modalBody = document.querySelector('.modal-body');
+    modalBody.innerHTML = msg;
+
+    // Activo el modal con el método <.show>
+    miModal.show();
+
+  };
+
   function editCartTemplate(a, b) {
 
     const emptyCartText = b.parentElement.querySelector('.empty-cart-text');
     const btnIr = b.parentElement.querySelector('.btn-ir');
 
-    if (a.length = 1) {
+    if (a.length >= 1) {
 
       emptyCartText.style.display = 'none';
       btnIr.removeAttribute('disabled');
-
-    } else {
-      console.log('no')
+      return;
     };
 
   };

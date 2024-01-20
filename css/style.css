@@ -143,3 +143,8 @@
   background-color: #9d3415;
   color: #FFFFFF;
 }
+
+.fa-circle-xmark {
+  font-size: 3em;
+  color: red;
+}
