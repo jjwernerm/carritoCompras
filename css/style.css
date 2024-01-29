@@ -2,6 +2,10 @@
   color: #8C2703;
 }
 
+.amount {
+  background-color: #8C2703;
+}
+
 .pizza-bg-color {
   background-color: #D98E04;
 }
@@ -19,15 +23,11 @@
   height: 10vh;
 }
 
-.btn-group {
-  width: 90vw !important;
+.sticky-top {
+  box-shadow: 0px 0px 10px black;
 }
 
 /* cart-dropdown */
-.dropdown-menu {
-  width: 90vw !important;
-}
-
 .cart-img {
   height: 100%;
   width: 100%;
@@ -47,22 +47,6 @@
 
 .fa-square-minus {
   color: red;
-}
-
-@media (min-width: 576px) {
-
-  .dropdown-menu {
-    width: 50vw !important;
-  }
-
-}
-
-@media (min-width: 992px) {
-
-  .dropdown-menu {
-    width: 30vw !important;
-  }
-
 }
 /* end cart-dropdown */
 
@@ -99,6 +83,10 @@
   .display-desktop {
     display: none;
   }
+
+  .cart-menu {  
+    width: 100%;
+  }
   
 }
 
@@ -111,7 +99,11 @@
   .display-mobile {
     display: none;
   }
-  
+
+  .cart-menu {  
+    width: 30%;
+  }
+
 }
 
 .card {
@@ -144,7 +136,15 @@
   color: #FFFFFF;
 }
 
-.fa-circle-xmark {
-  font-size: 3em;
-  color: red;
+.fa-triangle-exclamation {
+  color: orange;
+  font-size: 3em;  
+}
+
+.cart-menu {  
+  box-shadow: 0px 0px 10px black;
+  position: fixed;
+  display: none;
+  z-index: 1;
+  padding: 1em;
 }

@@ -58,6 +58,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // Asigno el elemento <class='card-template'> a <cardTemplate>
   const cardTemplate = document.querySelector('.card-template');
 
+  const buttonCart = document.querySelector('.button-cart');
+  buttonCart.addEventListener('click', dropdownCart);
+
   // Utilizo el método <.map> para iterar sobre el arreglo de objetos y poder generar un array de plantillas.
   const templatesCard = pizzas.map( pizza => {
 
@@ -66,17 +69,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const { img, name, ingredients, cost} = pizza;
 
     return`
-      <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
-        <div class="card mb-5" style="width: 18rem;">
-          <img src="${img}" class="card-img-top p-2 rounded-4" alt="...">
-          <div class="card-body">
-            <h4 class="card-title">${name}</h4>
-            <p class="card-text h-card">${ingredients}</p>
-            <h6 class="card-cost">${cost.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}</h6>
-            <button class="btn pizza-bg-color btn-agregar" type="button">
-              Agregar
-              <i class="fa-solid fa-cart-shopping"></i>
-            </button>
+      <div class="">
+        <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+          <div class="card mb-5" style="width: 18rem;">
+            <img src="${img}" class="card-img-top p-2 rounded-4" alt="...">
+            <div class="card-body">
+              <h4 class="card-title">${name}</h4>
+              <p class="card-text h-card">${ingredients}</p>
+              <h6 class="card-cost">${cost.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}</h6>
+              <button class="btn pizza-bg-color btn-agregar" type="button">
+                Agregar
+                <i class="fa-solid fa-cart-shopping"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>      
@@ -86,10 +91,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // Utilizo el método <.join('')> para concatenar el array 'templates' en una sola cadena de texto.
   // Asigno al <innerHTML> de 'cardTemplate'
   cardTemplate.innerHTML = templatesCard.join('');
-
-  const cards = document.querySelectorAll('.card');
-  let pizzasCart = [];  
   
+  const cards = document.querySelectorAll('.card');  
+  let pizzasCart = [];  
+
   // Utilizo el método <forEach> para iterar sobre cada elemento '.card'
   // Utilizo el evento <click> mediante <addEventListener> especificando que la función 'selectPizza' debe ejecutarse. 
   cards.forEach(card => {
@@ -108,11 +113,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     };
 
-  };
+  };    
 
   function createObjectCart(cardPizza) {
 
-    const fs6 = document.querySelector('.fs-5');
+    const fs6 = document.querySelector('.fs-6');
 
     const objectCart = {
       img: cardPizza.querySelector('img').src,
@@ -147,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // Utilizo <return> para devolver cada plantilla generada por el <.map>
       return`
         <div class="row">
-          <div class="col-3"><img src='${img}' class="cart-img"></div>
+          <div class="col-3"><img src='${img}' class="cart-img rounded"></div>
           <div class="col-4">
             <p class="fw-bold">${name}</p>
             <p class="cart-cost">${cost}</p>
@@ -156,9 +161,9 @@ document.addEventListener('DOMContentLoaded', function () {
             <p class="fw-bold text-center">Cantidad</p>
             <div class="d-flex justify-content-between">
               <p class="cart-amount">${amount}</p>
-              <i class="fa-solid fa-square-plus amount-edit"></i>
-              <i class="fa-solid fa-square-minus amount-edit"></i>
-              <i class="fa-solid fa-trash-can amount-edit"></i>
+              <i type="button" class="fa-solid fa-square-plus amount-edit b-plus"></i>
+              <i type="button" class="fa-solid fa-square-minus amount-edit b-minus"></i>
+              <i type="button" class="fa-solid fa-trash-can amount-edit b-remove"></i>
             </div>
           </div>
         </div>
@@ -168,7 +173,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
     cartTemplate.innerHTML = templatesCart.join('');
 
+    const bRemove = document.querySelector('.b-remove');
+
+    if (bRemove) {      
+      bRemove.addEventListener('click', removePizza);
+    };
+
     editCartTemplate(pizzasCart, cartTemplate);
+
+  };
+
+  function dropdownCart() {
+
+    const cartMenu = document.querySelector('.cart-menu');    
+
+    cartMenu.style.display = 'block';
+
+    buttonCart.addEventListener('click', function(event) {
+      cartMenu.style.display = 'block';
+      event.stopPropagation(); // Evita que el clic se propague al documento
+    });
+
+    // Cierra el cartMenu si se hace clic fuera de él
+    document.addEventListener('click', function(event) {
+      if (!cartMenu.contains(event.target) && !buttonCart.contains(event.target)) {
+          cartMenu.style.display = 'none';
+      };
+    });
 
   };
 
@@ -199,6 +230,14 @@ document.addEventListener('DOMContentLoaded', function () {
       btnIr.removeAttribute('disabled');
       return;
     };
+
+  };
+
+  function removePizza(e) {
+
+    e.preventDefault();
+
+    console.log('Pizza Eliminada')
 
   };
 

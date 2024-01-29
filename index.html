@@ -17,32 +17,35 @@
 
 <body>
 
-  <div class="container-fluid bg-white sticky-top">
-    <div class="btn-group justify-content-between align-items-center fs-1 h-tape" role="group">
-      <div class="">
-        <i class="fa-solid fa-pizza-slice fa-color pizza-bg-color rounded"></i>
-        <span class="fs-4 fw-bold text-pizza-color border-text"> Pizzas Hot </span>
+  <div class="container-fluid d-flex justify-content-between align-items-center bg-white sticky-top h-tape">
+    <div>
+      <i class="ms-5 fs-2 fa-solid fa-pizza-slice fa-color pizza-bg-color rounded"></i>
+      <span class="fs-4 fw-bold text-pizza-color border-text">
+        Pizzas Hot
+      </span>
+    </div>
+
+    <div class="button-cart">
+      <i type="button" class="fa-solid fa-cart-shopping fs-3 fa-color">
+        <span class="amount fs-6 rounded-circle text-white p-1">0</span>
+      </i>      
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <div class="pt-3 pb-3 bg-white rounded-bottom cart-menu">
+      <div class="cart-template">
+        <!-- cartTemplate JS -->
       </div>
-      <div data-bs-toggle="dropdown" aria-expanded="false">
-        <a href="">
-          <i class="fa-solid fa-cart-shopping fa-color"><span class="fs-5"></span></i>
-        </a>
+      <div class="text-center text-body-secondary empty-cart-text">
+        Tu carrito está vacío.
+        <hr />
       </div>
-      <div class="dropdown-menu">
-        <div class="container-fluid">
-          <div class="cart-template">
-            <!-- cartTemplate JS -->
-          </div>
-          <div class="row">
-            <div class="text-center text-body-secondary empty-cart-text">Tu carrito está vacío.</div>
-          </div>
-          <div class="row justify-content-center">
-            <button class="btn pizza-bg-color btn-ir" type="button" disabled>
-              Ir a pagar
-              <i class="fa-solid fa-money-check-dollar"></i>
-            </button>
-          </div>
-        </div>
+      <div class="d-flex justify-content-center">
+        <button class="btn pizza-bg-color btn-ir" type="button" disabled>
+          Ir a pagar
+          <i class="fa-solid fa-money-check-dollar"></i>
+        </button>
       </div>
     </div>
   </div>
@@ -112,26 +115,34 @@
     </div>
   </div>
 
-  <div class="container-fluid">
-    <div class="row card-template">
-      <!-- cardTemplate JS -->
+  <div class="d-flex flex-wrap justify-content-evenly card-template">
+
+
+        <!-- cardTemplate JS -->
+
+
+  </div>
+
+  <div class="container-fluid tape-color">
+    <div class="row align-items-center text-white text-center h-tape">
+      <p>©Copyright 2024 joannywerner. Todos los derechos reservados</p>
     </div>
   </div>
 
   <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">...</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">...</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">...</div>
+        <div class=" text-center mb-3"><i class="fa-solid fa-triangle-exclamation"></i></div>
       </div>
-      <div class="modal-body text-center">...</div>
-      <div class=" text-center mb-3"><i class="fa-solid fa-circle-xmark"></i></div>
     </div>
   </div>
-</div>
-  
+
 
   <script src="/js/app.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
