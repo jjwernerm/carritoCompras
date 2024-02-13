@@ -1,5 +1,5 @@
 // Cuando el DOM se haya cargado completamente,
-// Utilizo el evento <addEventListener> del DOM para ejecutar el resto del código. 
+// Utilizo el evento <addEventListener> del DOM para ejecutar el resto del código.
 document.addEventListener('DOMContentLoaded', function () {
 
   const pizzas = [
@@ -55,17 +55,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
   ];
 
-  // Asigno el elemento <class='card-template'> a <cardTemplate>
+  // Variables
+  // Asignando elementos a las variables
   const cardTemplate = document.querySelector('.card-template');
-
+  const cartTemplate = document.querySelector('.cart-template');
   const buttonCart = document.querySelector('.button-cart');
+  const btnAdd = document.querySelector('.btn-add');
+  const fs6 = document.querySelector('.fs-6');
+  let pizzasCart = [];
+
+  // Eventos
   buttonCart.addEventListener('click', dropdownCart);
+  cartTemplate.addEventListener('click', removePizza);
+  cartTemplate.addEventListener('click', addPizza);
+  cartTemplate.addEventListener('click', subtractPizza);
 
   // Utilizo el método <.map> para iterar sobre el arreglo de objetos y poder generar un array de plantillas.
   const templatesCard = pizzas.map( pizza => {
 
     // Aplico destructuring (desestructuración de objetos), me permite extraer valores del arreglo y asignarlos
-    // a variables individuales. 
+    // a variables individuales.
     const { img, name, ingredients, cost} = pizza;
 
     return`
@@ -84,19 +93,17 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
           </div>
         </div>
-      </div>      
+      </div>
     `
   });
 
   // Utilizo el método <.join('')> para concatenar el array 'templates' en una sola cadena de texto.
   // Asigno al <innerHTML> de 'cardTemplate'
   cardTemplate.innerHTML = templatesCard.join('');
-  
-  const cards = document.querySelectorAll('.card');  
-  let pizzasCart = [];  
+  const cards = document.querySelectorAll('.card');
 
   // Utilizo el método <forEach> para iterar sobre cada elemento '.card'
-  // Utilizo el evento <click> mediante <addEventListener> especificando que la función 'selectPizza' debe ejecutarse. 
+  // Utilizo el evento <click> mediante <addEventListener> especificando que la función 'selectPizza' debe ejecutarse.
   cards.forEach(card => {
     card.addEventListener('click', selectPizza);
   });
@@ -104,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function selectPizza(e) {
 
     e.preventDefault();
-  
+
     if (e.target.classList.contains('btn-agregar')) {
 
       const btnAgregarClick = e.target.parentElement.parentElement;
@@ -113,93 +120,65 @@ document.addEventListener('DOMContentLoaded', function () {
 
     };
 
-  };    
+  };
 
   function createObjectCart(cardPizza) {
-
-    const fs6 = document.querySelector('.fs-6');
 
     const objectCart = {
       img: cardPizza.querySelector('img').src,
       name: cardPizza.querySelector('h4').textContent,
       cost: cardPizza.querySelector('h6').textContent,
+      id: cardPizza.querySelector('h4').textContent,
       amount: 1,
     };
 
     const existsPizza = pizzasCart.some(pizza => pizza.name === objectCart.name);
-    
+
     if (existsPizza) {
       msgPizzaExists(`Pizza ${objectCart.name}`, `Ya está en tu carrito.`);
     } else {
       // spread operator
       pizzasCart = [...pizzasCart, objectCart];
-      fs6.innerHTML = pizzasCart.length;
-    };    
+    };
 
-    addPizzaCart();        
+    addPizzaCart();
 
   };
 
   function addPizzaCart() {
 
-    const cartTemplate = document.querySelector('.cart-template');
-
     const templatesCart = pizzasCart.map( pizzaCart => {
 
       // Aplicando destructuring
-      const { img, name, cost, amount} = pizzaCart;
+      const { img, name, cost, amount, id } = pizzaCart;
 
       // Utilizo <return> para devolver cada plantilla generada por el <.map>
       return`
-        <div class="row">
+        <div class="row list-pizzas-cart">
           <div class="col-3"><img src='${img}' class="cart-img rounded"></div>
           <div class="col-4">
             <p class="fw-bold">${name}</p>
             <p class="cart-cost">${cost}</p>
           </div>
           <div class="col-5">
-            <p class="fw-bold text-center">Cantidad</p>
+            <p class="fw-bold ">Cantidad</p>
             <div class="d-flex justify-content-between">
               <p class="cart-amount">${amount}</p>
-              <i type="button" class="fa-solid fa-square-plus amount-edit b-plus"></i>
-              <i type="button" class="fa-solid fa-square-minus amount-edit b-minus"></i>
-              <i type="button" class="fa-solid fa-trash-can amount-edit b-remove"></i>
+              <i type="button" class="fa-solid fa-square-plus amount-edit btn-add" data-id="${id}"></i>
+              <i type="button" class="fa-solid fa-square-minus amount-edit btn-subtract" data-id="${id}"></i>
+              <i type="button" class="fa-solid fa-trash-can amount-edit btn-remove" data-id="${id}"></i>
             </div>
           </div>
         </div>
-        <hr />      
+        <hr />
       `;
     });
 
     cartTemplate.innerHTML = templatesCart.join('');
 
-    const bRemove = document.querySelector('.b-remove');
-
-    if (bRemove) {      
-      bRemove.addEventListener('click', removePizza);
-    };
-
     editCartTemplate(pizzasCart, cartTemplate);
 
-  };
-
-  function dropdownCart() {
-
-    const cartMenu = document.querySelector('.cart-menu');    
-
-    cartMenu.style.display = 'block';
-
-    buttonCart.addEventListener('click', function(event) {
-      cartMenu.style.display = 'block';
-      event.stopPropagation(); // Evita que el clic se propague al documento
-    });
-
-    // Cierra el cartMenu si se hace clic fuera de él
-    document.addEventListener('click', function(event) {
-      if (!cartMenu.contains(event.target) && !buttonCart.contains(event.target)) {
-          cartMenu.style.display = 'none';
-      };
-    });
+    fs6.innerHTML = pizzasCart.length;
 
   };
 
@@ -222,23 +201,100 @@ document.addEventListener('DOMContentLoaded', function () {
   function editCartTemplate(a, b) {
 
     const emptyCartText = b.parentElement.querySelector('.empty-cart-text');
-    const btnIr = b.parentElement.querySelector('.btn-ir');
+    const emptyCartTotal = b.parentElement.querySelector('.empty-cart-total');
+    const btnPagar = b.parentElement.querySelector('.btn-pagar');
 
     if (a.length >= 1) {
 
       emptyCartText.style.display = 'none';
-      btnIr.removeAttribute('disabled');
+      emptyCartTotal.style.display = 'block';
+      btnPagar.removeAttribute('disabled');
+      return;
+    };
+
+    if (a.length === 0) {
+
+      emptyCartText.style.display = 'block';
+      emptyCartTotal.style.display = 'none';
+      btnPagar.setAttribute('disabled', true);
       return;
     };
 
   };
 
-  function removePizza(e) {
+  function dropdownCart() {
 
+    const cartMenu = document.querySelector('.cart-menu');
+
+    cartMenu.style.display = 'block';
+
+    buttonCart.addEventListener('click', function(event) {
+      cartMenu.style.display = 'block';
+      event.stopPropagation(); // Evita que el clic se propague al documento
+    });
+
+    // Cierra el cartMenu si se hace clic fuera de él
+    document.addEventListener('click', function(event) {
+      if (!cartMenu.contains(event.target) && !buttonCart.contains(event.target)) {
+          cartMenu.style.display = 'none';
+      };
+    });
+
+  };
+
+  function addPizza(e) {
     e.preventDefault();
+    e.stopPropagation();    
 
-    console.log('Pizza Eliminada')
+    if(e.target.classList.contains('btn-add')) {
+      const pizzaID = e.target.getAttribute('data-id');
+      
+      const addPizzas = pizzasCart.map( pizza => {
+        if(pizza.id === pizzaID ) {
+          pizza.amount++;
+          return pizza; // retorna el objeto actualizado
+        } else {
+          return pizza; // retorna los objetos que no son los duplicados
+        };
+      });
 
+    };
+
+    addPizzaCart();
+
+  };
+
+  function subtractPizza(e) {
+    e.preventDefault();
+    e.stopPropagation();    
+
+    if(e.target.classList.contains('btn-subtract')) {
+      const pizzaID = e.target.getAttribute('data-id');
+      
+      const subtractPizzas = pizzasCart.map( pizza => {
+        if(pizza.id === pizzaID && pizza.amount > 1 ) {
+          pizza.amount--;
+          return pizza; // retorna el objeto actualizado
+        } else {
+          return pizza; // retorna los objetos que no son los duplicados
+        };
+      });
+
+    };
+
+    addPizzaCart();
+
+  };
+
+  function removePizza(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if(e.target.classList.contains('btn-remove')) {
+      const pizzaID = e.target.getAttribute('data-id');
+      pizzasCart = pizzasCart.filter( pizza => pizza.id !== pizzaID );
+    };
+    addPizzaCart();
   };
 
 });
