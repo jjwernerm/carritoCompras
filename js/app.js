@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
       "img": "https://res.cloudinary.com/dqjnzfsp6/image/upload/v1704334410/fourSeasonsPizza_b9zfjp.jpg",
       "name": "Cuatro Estaciones",
       "ingredients": "Mozzarella y 4 estaciones de jamón pepperonni, aceituna y champiñones.",
-      "cost": 11990,
+      "cost": 15990,
     },
 
   ];
@@ -60,8 +60,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const cardTemplate = document.querySelector('.card-template');
   const cartTemplate = document.querySelector('.cart-template');
   const buttonCart = document.querySelector('.button-cart');
-  const btnAdd = document.querySelector('.btn-add');
-  const fs6 = document.querySelector('.fs-6');
+  const fs6 = document.querySelector('.fs-6'); 
+  const printTotal = document.querySelector('#print-total'); 
   let pizzasCart = [];
 
   // Eventos
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="card-body">
               <h4 class="card-title">${name}</h4>
               <p class="card-text h-card">${ingredients}</p>
-              <h6 class="card-cost">${cost.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}</h6>
+              <h6 class="card-cost">${cost}</h6>
               <button class="btn pizza-bg-color btn-agregar" type="button">
                 Agregar
                 <i class="fa-solid fa-cart-shopping"></i>
@@ -127,8 +127,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const objectCart = {
       img: cardPizza.querySelector('img').src,
       name: cardPizza.querySelector('h4').textContent,
-      cost: cardPizza.querySelector('h6').textContent,
+      cost: parseInt(cardPizza.querySelector('h6').textContent),
       id: cardPizza.querySelector('h4').textContent,
+      subTotal: parseInt(cardPizza.querySelector('h6').textContent),
       amount: 1,
     };
 
@@ -139,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       // spread operator
       pizzasCart = [...pizzasCart, objectCart];
+
     };
 
     addPizzaCart();
@@ -179,7 +181,21 @@ document.addEventListener('DOMContentLoaded', function () {
     editCartTemplate(pizzasCart, cartTemplate);
 
     fs6.innerHTML = pizzasCart.length;
+    
+    updateCart()
 
+  };
+
+  function updateCart() {
+    
+    let total = 0;
+    
+    pizzasCart.forEach(pizza => {
+      total += pizza.subTotal;
+    });
+
+    printTotal.innerHTML = total;
+  
   };
 
   function msgPizzaExists(pizzaName, msg) {
@@ -248,20 +264,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if(e.target.classList.contains('btn-add')) {
       const pizzaID = e.target.getAttribute('data-id');
-      
-      const addPizzas = pizzasCart.map( pizza => {
+
+      pizzasCart.forEach( pizza => {
         if(pizza.id === pizzaID ) {
           pizza.amount++;
+          pizza.subTotal = ( parseInt(pizza.cost) * parseInt(pizza.amount) );
+          updateCart();
           return pizza; // retorna el objeto actualizado
         } else {
-          return pizza; // retorna los objetos que no son los duplicados
+        return pizza; // retorna los objetos que no son los duplicados
         };
       });
-
     };
-
     addPizzaCart();
-
   };
 
   function subtractPizza(e) {
@@ -270,20 +285,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if(e.target.classList.contains('btn-subtract')) {
       const pizzaID = e.target.getAttribute('data-id');
-      
-      const subtractPizzas = pizzasCart.map( pizza => {
+
+      pizzasCart.forEach( pizza => {
         if(pizza.id === pizzaID && pizza.amount > 1 ) {
           pizza.amount--;
+          pizza.subTotal = ( parseInt(pizza.cost) * parseInt(pizza.amount) )
+          updateCart();
           return pizza; // retorna el objeto actualizado
         } else {
-          return pizza; // retorna los objetos que no son los duplicados
+        return pizza; // retorna los objetos que no son los duplicados
         };
       });
-
     };
-
     addPizzaCart();
-
   };
 
   function removePizza(e) {
@@ -298,3 +312,10 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
 });
+
+
+
+
+
+
+
