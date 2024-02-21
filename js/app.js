@@ -1,7 +1,3 @@
-// Cuando el DOM se haya cargado completamente,
-// Utilizo el evento <addEventListener> del DOM para ejecutar el resto del código.
-document.addEventListener('DOMContentLoaded', function () {
-
   const pizzas = [
 
     {
@@ -70,6 +66,15 @@ document.addEventListener('DOMContentLoaded', function () {
   cartTemplate.addEventListener('click', addPizza);
   cartTemplate.addEventListener('click', subtractPizza);
 
+  document.addEventListener('DOMContentLoaded', () => {
+
+    //Agregar localStorage cuando el documento esté listo (DOMContentLoaded)
+    pizzasCart = JSON.parse( localStorage.getItem ('cart') ) || [];
+
+    addPizzaCart();
+
+  });
+
   // Utilizo el método <.map> para iterar sobre el arreglo de objetos y poder generar un array de plantillas.
   const templatesCard = pizzas.map( pizza => {
 
@@ -85,7 +90,8 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="card-body">
               <h4 class="card-title">${name}</h4>
               <p class="card-text h-card">${ingredients}</p>
-              <h6 class="card-cost">${cost}</h6>
+              <p class="card-cost" style="display: none;">${cost}</p>
+              <h6 class="card-cost">${cost.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}</h6>
               <button class="btn pizza-bg-color btn-agregar" type="button">
                 Agregar
                 <i class="fa-solid fa-cart-shopping"></i>
@@ -127,9 +133,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const objectCart = {
       img: cardPizza.querySelector('img').src,
       name: cardPizza.querySelector('h4').textContent,
-      cost: parseInt(cardPizza.querySelector('h6').textContent),
+      cost: parseInt(cardPizza.querySelector('.card-cost').textContent),
       id: cardPizza.querySelector('h4').textContent,
-      subTotal: parseInt(cardPizza.querySelector('h6').textContent),
+      subTotal: parseInt(cardPizza.querySelector('.card-cost').textContent),
       amount: 1,
     };
 
@@ -160,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <div class="col-3"><img src='${img}' class="cart-img rounded"></div>
           <div class="col-4">
             <p class="fw-bold">${name}</p>
-            <p class="cart-cost">${cost}</p>
+            <p class="cart-cost">${cost.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}</p>
           </div>
           <div class="col-5">
             <p class="fw-bold ">Cantidad</p>
@@ -184,6 +190,8 @@ document.addEventListener('DOMContentLoaded', function () {
     
     updateCart()
 
+    localStorage.setItem("cart", JSON.stringify(pizzasCart));
+
   };
 
   function updateCart() {
@@ -194,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
       total += pizza.subTotal;
     });
 
-    printTotal.innerHTML = total;
+    printTotal.innerHTML = total.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
   
   };
 
@@ -310,12 +318,3 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     addPizzaCart();
   };
-
-});
-
-
-
-
-
-
-
